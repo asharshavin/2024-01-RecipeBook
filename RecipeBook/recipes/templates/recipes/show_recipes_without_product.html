@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Рецепты</title>
+</head>
+<body>
+<h2>Рецепты, в которых продукт '{{product}}' отсутствует, или присутствует в количестве меньше 10 грамм.</h2>
+<ul class="list-articles">
+    {% for p in dishes %}
+        <p>{{p.id}} | {{p.title}} </p>
+    {% endfor %}
+</ul>
+
+</body>
+</html>
