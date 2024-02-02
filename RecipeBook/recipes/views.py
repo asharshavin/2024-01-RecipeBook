@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.db.models import F
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
@@ -28,16 +29,15 @@ def add_product_to_recipe(request):
 
 
 @transaction.atomic
-def cook_dish(request):
+def cook_recipe(request):
     if request.method == 'GET':
         dish_id = request.GET.get('dish_id')
 
         if dish_id:
+
             dish = get_object_or_404(Dish, id=dish_id)
 
-            for product in dish.product.all():
-                product.quantity += 1
-                product.save()
+            Product.objects.select_for_update().filter(dish=dish).update(quantity=F('quantity') + 1)
 
             return HttpResponse(f"Dish {dish.title} cooked successfully.")
         else:
